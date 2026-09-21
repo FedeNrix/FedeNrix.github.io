@@ -179,6 +179,52 @@
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
+        /* Estilo para el Panel de Datos en Vivo (Arriba del todo) */
+        .live-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px -2px rgba(56, 189, 248, 0.08);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #38bdf8, #9146ff);
+        }
+
+        .live-date {
+            font-size: 0.85rem;
+            color: #38bdf8;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .live-clock {
+            font-size: 2.2rem;
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0.4rem 0;
+            letter-spacing: 1px;
+        }
+
+        .live-weather {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
         h2 {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
@@ -327,6 +373,13 @@
             <p>Bienvenido al repositorio de mi vida y proyectos. Aquí centralizo todo el contenido que genero, mis directos, mis redes y los hitos de mi día a día.</p>
         </section>
 
+        <!-- Panel en Vivo de Datos del Visitante (Ubicación, Clima, Reloj y Fecha) -->
+        <div class="live-panel">
+            <div class="live-date" id="fecha-actual">Cargando fecha...</div>
+            <div class="live-clock" id="reloj-digital">00:00:00</div>
+            <div class="live-weather" id="info-ubicacion-clima">📍 Detectando tu ubicación y clima local...</div>
+        </div>
+
         <!-- Canales de Contenido -->
         <section id="contenido">
             <h2>💻 Plataformas y Redes</h2>
@@ -415,7 +468,63 @@
             badgeText.textContent = "¡Buenas noches! 🌙 Transmitiendo o creando";
         }
 
-        // 2. Función para copiar el correo
+        // 2. Reloj en tiempo real, segundos y fecha actual
+        function iniciarReloj() {
+            const relojElemento = document.getElementById('reloj-digital');
+            const fechaElemento = document.getElementById('fecha-actual');
+            
+            setInterval(() => {
+                const ahora = new Date();
+                relojElemento.textContent = ahora.toLocaleTimeString();
+                
+                const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                fechaElemento.textContent = ahora.toLocaleDateString('es-ES', opcionesFecha);
+            }, 1000);
+        }
+
+        // 3. Geolocalización y Clima local (Open-Meteo)
+        async function obtenerClimaYUbicacion() {
+            const infoClimaElemento = document.getElementById('info-ubicacion-clima');
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    try {
+                        const respuestaClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                        const datosClima = await respuestaClima.json();
+                        
+                        if (datosClima && datosClima.current_weather) {
+                            const temp = datosClima.current_weather.temperature;
+                            const codigoWMO = datosClima.current_weather.weathercode;
+                            
+                            let estadoClima = "Despejado ☀️";
+                            if (codigoWMO > 0 && codigoWMO < 4) estadoClima = "Parcialmente nublado ⛅";
+                            if (codigoWMO >= 45 && codigoWMO <= 48) estadoClima = "Neblina 🌫️";
+                            if (codigoWMO >= 51 && codigoWMO <= 67) estadoClima = "Lluvia 🌧️";
+                            if (codigoWMO >= 71) estadoClima = "Nieve ❄️";
+
+                            infoClimaElemento.innerHTML = `📍 Ubicación detectada &nbsp;|&nbsp; 🌡️ Temperatura: <b>${temp}°C</b> (${estadoClima})`;
+                        } else {
+                            infoClimaElemento.textContent = "📍 Ubicación detectada (Clima no disponible)";
+                        }
+                    } catch (error) {
+                        infoClimaElemento.textContent = "📍 Ubicación detectada (Error al obtener clima)";
+                    }
+                }, () => {
+                    infoClimaElemento.textContent = "🌍 Modo Visitante (Permiso de ubicación no concedido)";
+                }, { timeout: 10000 });
+            } else {
+                infoClimaElemento.textContent = "🌍 Tu navegador no soporta geolocalización";
+            }
+        }
+
+        // Ejecutar funciones de reloj y clima
+        iniciarReloj();
+        obtenerClimaYUbicacion();
+
+        // 4. Función para copiar el correo
         function copiarCorreo() {
             const correo = "fedejuareztachini2007@gmail.com";
             navigator.clipboard.writeText(correo).then(() => {
@@ -427,27 +536,25 @@
             });
         }
 
-        // 3. Sistema de Modo Claro / Oscuro con memoria local (localStorage)
+        // 5. Sistema de Modo Claro / Oscuro con memoria local (localStorage)
         const themeToggleBtn = document.getElementById('themeToggle');
         const bodyElement = document.body;
 
-        // Comprobar si el usuario ya tenía una preferencia guardada previamente
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {
             bodyElement.classList.add('light-mode');
             themeToggleBtn.textContent = '☀️';
         }
 
-        // Evento al hacer clic en el botón interruptor
         themeToggleBtn.addEventListener('click', () => {
             bodyElement.classList.toggle('light-mode');
             
             if (bodyElement.classList.contains('light-mode')) {
                 themeToggleBtn.textContent = '☀️';
-                localStorage.setItem('theme', 'light'); // Guarda la preferencia
+                localStorage.setItem('theme', 'light');
             } else {
                 themeToggleBtn.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');  // Guarda la preferencia
+                localStorage.setItem('theme', 'dark');
             }
         });
     </script>
