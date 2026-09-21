@@ -96,7 +96,6 @@
             margin-bottom: 4rem;
         }
 
-        /* Hero / Presentación */
         .hero {
             text-align: center;
             padding: 1.5rem 0;
@@ -142,7 +141,6 @@
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
-        /* Títulos de sección */
         h2 {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
@@ -153,7 +151,6 @@
             gap: 0.5rem;
         }
 
-        /* Redes y Plataformas (Grid de Creador) */
         .platforms-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -207,7 +204,6 @@
             color: var(--text-muted);
         }
 
-        /* Sección de Vida / Bitácora / Proyectos */
         .timeline {
             display: flex;
             flex-direction: column;
@@ -238,7 +234,23 @@
             font-size: 0.95rem;
         }
 
-        /* Footer */
+        /* Estilo extra para el botón interactivo de JS */
+        .copy-btn {
+            background-color: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #38bdf8;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -266,7 +278,7 @@
         <!-- Presentación Principal -->
         <section class="hero">
             <div class="status-badge">
-                <span class="status-dot"></span> Creador de Contenido & Estudiante
+                <span class="status-dot"></span> <span id="saludo-dinamico">Creador de Contenido & Estudiante</span>
             </div>
             <h1>Hola, soy Federico</h1>
             <p>Bienvenido al repositorio de mi vida y proyectos. Aquí centralizo todo el contenido que genero, mis directos, mis redes y los hitos de mi día a día.</p>
@@ -323,7 +335,7 @@
             </div>
         </section>
 
-        <!-- Bitácora o Línea de Tiempo (Proyectos de vida / Canal) -->
+        <!-- Bitácora o Línea de Tiempo -->
         <section id="bitacora">
             <h2>📜 Bitácora de Proyectos</h2>
             <div class="timeline">
@@ -340,12 +352,14 @@
             </div>
         </section>
 
-        <!-- Contacto -->
+        <!-- Contacto con función JS -->
         <section id="contacto">
             <h2>📬 Contacto</h2>
             <div class="timeline-item" style="text-align: center;">
                 <p style="margin-bottom: 1rem;">¿Quieres ponerte en contacto conmigo?</p>
-                <a href="mailto:tu-correo@example.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">Escríbeme a fedejuareztachini2007@gmail.com &rarr;</a>
+                <a href="mailto:fedejuareztachini2007@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none; display: block; margin-bottom: 1rem;">fedejuareztachini2007@gmail.com</a>
+                <!-- Botón interactivo controlado por JavaScript -->
+                <button class="copy-btn" onclick="copiarCorreo()">📋 Copiar correo al portapapeles</button>
             </div>
         </section>
     </main>
@@ -354,5 +368,31 @@
         <p>&copy; 2026 - Federico. Creado con GitHub Pages.</p>
     </footer>
 
+    <!-- Código JavaScript integrado -->
+    <script>
+        // 1. Saludo automático según la hora del usuario
+        const badgeText = document.getElementById('saludo-dinamico');
+        const hora = new Date().getHours();
+        
+        if (hora >= 6 && hora < 12) {
+            badgeText.textContent = "¡Buen día! ☀️ Creador de Contenido";
+        } else if (hora >= 12 && hora < 20) {
+            badgeText.textContent = "¡Buenas tardes! 🚀 Creador de Contenido";
+        } else {
+            badgeText.textContent = "¡Buenas noches! 🌙 Transmitiendo o creando";
+        }
+
+        // 2. Función para copiar el correo automáticamente al hacer clic
+        function copiarCorreo() {
+            const correo = "fedejuareztachini2007@gmail.com";
+            navigator.clipboard.writeText(correo).then(() => {
+                const boton = document.querySelector('.copy-btn');
+                boton.textContent = "✅ ¡Correo copiado!";
+                setTimeout(() => {
+                    boton.textContent = "📋 Copiar correo al portapapeles";
+                }, 2500);
+            });
+        }
+    </script>
 </body>
 </html>
