@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Página Personal</title>
+    <title>Federico | Repositorio Personal</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
+            --bg-color: #0b0f19;
+            --card-bg: #131c2e;
+            --text-color: #f1f5f9;
             --text-muted: #94a3b8;
-            --accent-color: #38bdf8;
-            --accent-hover: #0ea5e9;
+            --accent-youtube: #ff0000;
+            --accent-twitch: #9146ff;
+            --accent-twitter: #1da1f2;
+            --accent-instagram: #e1306c;
+            --accent-reddit: #ff4500;
+            --border-color: #1e293b;
+            --hover-border: #38bdf8;
         }
 
         * {
@@ -31,12 +36,12 @@
         }
 
         header {
-            background-color: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(8px);
+            background-color: rgba(19, 28, 46, 0.85);
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid var(--border-color);
         }
 
         nav {
@@ -51,8 +56,15 @@
         .logo {
             font-weight: bold;
             font-size: 1.2rem;
-            color: var(--accent-color);
+            color: var(--text-color);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: #38bdf8;
         }
 
         .nav-links {
@@ -65,14 +77,15 @@
             color: var(--text-muted);
             text-decoration: none;
             transition: color 0.2s;
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
-            color: var(--accent-color);
+            color: #38bdf8;
         }
 
         main {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
             padding: 3rem 2rem;
             flex: 1;
@@ -83,111 +96,156 @@
             margin-bottom: 4rem;
         }
 
-        /* Hero Section */
+        /* Hero / Presentación */
         .hero {
             text-align: center;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
         }
 
         .hero h1 {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-color);
+            margin-bottom: 0.75rem;
         }
 
         .hero p {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto 2rem auto;
         }
 
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-hover);
-        }
-
-        /* Sección de Proyectos */
-        h2 {
-            font-size: 1.75rem;
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
             margin-bottom: 1.5rem;
-            border-bottom: 2px solid #334155;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* Títulos de sección */
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .projects-grid {
+        /* Redes y Plataformas (Grid de Creador) */
+        .platforms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
         }
 
-        .project-card {
+        .platform-card {
             background-color: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-color);
-        }
-
-        .project-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .project-card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-        }
-
-        .project-link {
-            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
             text-decoration: none;
-            font-size: 0.9rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--hover-border);
+        }
+
+        .platform-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .yt { background-color: var(--accent-youtube); }
+        .twitch { background-color: var(--accent-twitch); }
+        .twitter { background-color: var(--accent-twitter); }
+        .insta { background-color: var(--accent-instagram); }
+        .reddit { background-color: var(--accent-reddit); }
+
+        .platform-info h3 {
+            font-size: 1rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .platform-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Sección de Vida / Bitácora / Proyectos */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .timeline-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 8px;
+        }
+
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #38bdf8;
+            margin-bottom: 0.25rem;
             font-weight: 500;
         }
 
-        .project-link:hover {
-            text-decoration: underline;
+        .timeline-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
-        /* Contacto */
-        .contact-content {
-            background-color: var(--card-bg);
-            border: 1px solid #334155;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .contact-content p {
+        .timeline-item p {
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 1.5rem;
-            background-color: rgba(30, 41, 59, 0.5);
+            padding: 2rem;
+            background-color: rgba(19, 28, 46, 0.4);
             color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid #334155;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
@@ -195,52 +253,105 @@
 
     <header>
         <nav>
-            <a href="#" class="logo">MiWeb</a>
+            <a href="#" class="logo">Federico<span>.repo</span></a>
             <ul class="nav-links">
-                <li><a href="#sobre-mi">Sobre mí</a></li>
-                <li><a href="#proyectos">Proyectos</a></li>
+                <li><a href="#contenido">Contenido</a></li>
+                <li><a href="#bitacora">Bitácora</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <!-- Sección de Presentación -->
-        <section id="sobre-mi" class="hero">
-            <h1>Hola, soy <span style="color: var(--accent-color);">FedeNrix</span></h1>
-            <p>Bienvenido/a a mi espacio personal en internet. Aquí comparto un poco sobre quién soy, lo que hago y los proyectos en los que voy trabajando.</p>
-            <a href="#contacto" class="btn">Contáctame</a>
+        <!-- Presentación Principal -->
+        <section class="hero">
+            <div class="status-badge">
+                <span class="status-dot"></span> Creador de Contenido & Estudiante
+            </div>
+            <h1>Hola, soy Federico</h1>
+            <p>Bienvenido al repositorio de mi vida y proyectos. Aquí centralizo todo el contenido que genero, mis directos, mis redes y los hitos de mi día a día.</p>
         </section>
 
-        <!-- Sección de Proyectos -->
-        <section id="proyectos">
-            <h2>Mis Proyectos</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>Proyecto 1</h3>
-                    <p>Breve descripción de qué trata este proyecto, las tecnologías usadas o el objetivo que cumple.</p>
-                    <a href="#" class="project-link">Ver repositorio &rarr;</a>
+        <!-- Canales de Contenido -->
+        <section id="contenido">
+            <h2>💻 Plataformas y Redes</h2>
+            <div class="platforms-grid">
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@fedenrix2007" target="_blank" class="platform-card">
+                    <div class="platform-icon yt">YT</div>
+                    <div class="platform-info">
+                        <h3>YouTube</h3>
+                        <p>Videos y contenido principal</p>
+                    </div>
+                </a>
+
+                <!-- Twitch -->
+                <a href="https://www.twitch.tv/fedenrix" target="_blank" class="platform-card">
+                    <div class="platform-icon twitch">TW</div>
+                    <div class="platform-info">
+                        <h3>Twitch</h3>
+                        <p>Directos y streams en vivo</p>
+                    </div>
+                </a>
+
+                <!-- Twitter / X -->
+                <a href="https://x.com/FedeNrix_" target="_blank" class="platform-card">
+                    <div class="platform-icon twitter">𝕏</div>
+                    <div class="platform-info">
+                        <h3>Twitter / X</h3>
+                        <p>Opiniones y avisos rápidos</p>
+                    </div>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/fedenrix_/" target="_blank" class="platform-card">
+                    <div class="platform-icon insta">IG</div>
+                    <div class="platform-info">
+                        <h3>Instagram</h3>
+                        <p>Momentos y stories del día a día</p>
+                    </div>
+                </a>
+
+                <!-- Reddit -->
+                <a href="https://www.reddit.com/user/FedeNrix/" target="_blank" class="platform-card">
+                    <div class="platform-icon reddit">r/</div>
+                    <div class="platform-info">
+                        <h3>Reddit</h3>
+                        <p>Comunidad y debates</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Bitácora o Línea de Tiempo (Proyectos de vida / Canal) -->
+        <section id="bitacora">
+            <h2>📜 Bitácora de Proyectos</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2026 - Presente</div>
+                    <h3>Expansión del Canal y Contenido</h3>
+                    <p>Organizando nuevos streams en Twitch, mejorando la calidad de los videos y adaptando herramientas de retransmisión.</p>
                 </div>
-                <div class="project-card">
-                    <h3>Proyecto 2</h3>
-                    <p>Breve descripción de este segundo proyecto para mostrar tus habilidades y trabajos.</p>
-                    <a href="#" class="project-link">Ver repositorio &rarr;</a>
+                <div class="timeline-item">
+                    <div class="timeline-date">2025 - 2026</div>
+                    <h3>Estudios Universitarios (UBA)</h3>
+                    <p>Avanzando en materias del ciclo básico y equilibrando la creación de contenido con la vida académica.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Sección de Contacto -->
+        <!-- Contacto -->
         <section id="contacto">
-            <h2>Contacto</h2>
-            <div class="contact-content">
-                <p>¿Quieres ponerte en contacto conmigo o simplemente saludar? Escríbeme un correo electrónico.</p>
-                <a href="fedejuareztachini2007@gmail.com" class="btn">Enviar Correo</a>
+            <h2>📬 Contacto</h2>
+            <div class="timeline-item" style="text-align: center;">
+                <p style="margin-bottom: 1rem;">¿Quieres ponerte en contacto conmigo?</p>
+                <a href="mailto:tu-correo@example.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">Escríbeme a fedejuareztachini2007@gmail.com &rarr;</a>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 - Creado con GitHub Pages.</p>
+        <p>&copy; 2026 - Federico. Creado con GitHub Pages.</p>
     </footer>
 
 </body>
