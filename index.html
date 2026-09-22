@@ -7,8 +7,8 @@
     <style>
         /* Definición de colores para Modo Oscuro (Por defecto) - Morado y Verde Lima */
         :root {
-            --bg-color: #0b0813;
-            --card-bg: #141022;
+            --bg-color: rgba(11, 8, 19, 0.85); /* Semitransparente para ver el fondo animado */
+            --card-bg: rgba(20, 16, 34, 0.9);
             --text-color: #f3f4f6;
             --text-muted: #9ca3af;
             --border-color: #261e38;
@@ -16,13 +16,13 @@
             --accent-primary: #9146ff;
             --accent-secondary: #4ade80;
             --header-bg: rgba(20, 16, 34, 0.85);
-            --footer-bg: rgba(20, 16, 34, 0.4);
+            --footer-bg: rgba(20, 16, 34, 0.7);
         }
 
         /* Definición de colores para Modo Claro */
         body.light-mode {
-            --bg-color: #f7f5fa;
-            --card-bg: #ffffff;
+            --bg-color: rgba(247, 245, 250, 0.85);
+            --card-bg: rgba(255, 255, 255, 0.9);
             --text-color: #1f162e;
             --text-muted: #6b7280;
             --border-color: #e5e0ed;
@@ -38,6 +38,17 @@
             padding: 0;
             box-sizing: border-box;
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Estilo del Canvas de Fondo Psicodélico */
+        #psychedelic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
         }
 
         body {
@@ -164,7 +175,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background-color: rgba(145, 70, 255, 0.12);
+            background-color: rgba(145, 70, 255, 0.15);
             color: var(--accent-secondary);
             padding: 0.35rem 0.85rem;
             border-radius: 20px;
@@ -188,17 +199,17 @@
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
-        /* Panel en vivo con mezcla de acentos morado/lima */
         .live-panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 4px 15px -2px rgba(145, 70, 255, 0.1);
+            box-shadow: 0 4px 15px -2px rgba(145, 70, 255, 0.15);
             margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
 
         .live-panel::before {
@@ -263,13 +274,14 @@
             align-items: center;
             gap: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
             transition: all 0.2s ease;
         }
 
         .platform-card:hover {
             transform: translateY(-3px);
             border-color: var(--hover-border);
-            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.15);
         }
 
         .platform-icon {
@@ -308,6 +320,7 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
         }
 
         .copy-btn {
@@ -323,7 +336,7 @@
         }
 
         .copy-btn:hover {
-            background-color: rgba(74, 222, 128, 0.1);
+            background-color: rgba(74, 222, 128, 0.15);
             transform: translateY(-1px);
         }
 
@@ -334,12 +347,16 @@
             color: var(--text-muted);
             font-size: 0.85rem;
             border-top: 1px solid var(--border-color);
+            backdrop-filter: blur(5px);
         }
     </style>
-    <!-- Importación opcional de tipografía gótica elegante de Google Fonts -->
+    <!-- Importación de tipografía gótica -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Canvas para el fondo psicodélico animado -->
+    <canvas id="psychedelic-bg"></canvas>
 
     <header>
         <nav>
@@ -425,12 +442,59 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 - El Sótano del Frikismo. Creado con GitHub Pages.</p>
+        <p>&copy; 2026 - El Sótano del Frikismo. Creador de Contenido.</p>
     </footer>
 
     <!-- Lógica de JavaScript -->
     <script>
-        // 1. Saludo automático con "Buenos Días", "Buenas Tardes", "Buenas Noches"
+        // --- 0. Bucle Animado Psicodélico en Canvas de Fondo ---
+        const canvas = document.getElementById('psychedelic-bg');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let step = 0;
+        function animarFondo() {
+            const isLight = document.body.classList.contains('light-mode');
+            
+            // Fondo base sutil según el modo
+            ctx.fillStyle = isLight ? 'rgba(247, 245, 250, 0.15)' : 'rgba(11, 8, 19, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const maxRadius = Math.max(canvas.width, canvas.height) * 0.8;
+            
+            // Crear ondas psicodélicas circulares y geométricas entrelazadas
+            const rings = 18;
+            for (let i = rings; i > 0; i--) {
+                const radius = (i / rings) * maxRadius + Math.sin(step * 0.02 + i) * 35;
+                
+                ctx.beginPath();
+                ctx.arc(centerX + Math.cos(step * 0.01 + i) * 50, centerY + Math.sin(step * 0.015 - i) * 50, Math.abs(radius), 0, Math.PI * 2);
+                
+                // Mezcla de tonos morados y verde lima dinámicos
+                if (i % 2 === 0) {
+                    ctx.strokeStyle = isLight ? `rgba(124, 58, 237, ${0.08 + Math.sin(step * 0.03 + i) * 0.04})` : `rgba(145, 70, 255, ${0.12 + Math.sin(step * 0.03 + i) * 0.06})`;
+                } else {
+                    ctx.strokeStyle = isLight ? `rgba(22, 163, 74, ${0.08 + Math.cos(step * 0.03 + i) * 0.04})` : `rgba(74, 222, 128, ${0.12 + Math.cos(step * 0.03 + i) * 0.06})`;
+                }
+                
+                ctx.lineWidth = 3 + Math.sin(step * 0.05 + i) * 2;
+                ctx.stroke();
+            }
+
+            step += 0.8;
+            requestAnimationFrame(animarFondo);
+        }
+        animarFondo();
+
+        // --- 1. Saludo automático ---
         const badgeText = document.getElementById('saludo-dinamico');
         const hora = new Date().getHours();
         
@@ -442,7 +506,7 @@
             badgeText.textContent = "¡Buenas Noches! 🌙";
         }
 
-        // 2. Reloj en tiempo real y fecha actual
+        // --- 2. Reloj y Fecha ---
         function iniciarReloj() {
             const relojElemento = document.getElementById('reloj-digital');
             const fechaElemento = document.getElementById('fecha-actual');
@@ -456,7 +520,7 @@
             }, 1000);
         }
 
-        // 3. Geolocalización y Clima local (Open-Meteo)
+        // --- 3. Geolocalización y Clima ---
         async function obtenerClimaYUbicacion() {
             const infoClimaElemento = document.getElementById('info-ubicacion-clima');
 
@@ -494,11 +558,10 @@
             }
         }
 
-        // Inicializar funciones
         iniciarReloj();
         obtenerClimaYUbicacion();
 
-        // 4. Copiar correo
+        // --- 4. Copiar Correo ---
         function copiarCorreo() {
             const correo = "fedejuareztachini2007@gmail.com";
             navigator.clipboard.writeText(correo).then(() => {
@@ -510,7 +573,7 @@
             });
         }
 
-        // 5. Modo Claro / Oscuro con memoria local
+        // --- 5. Modo Claro / Oscuro ---
         const themeToggleBtn = document.getElementById('themeToggle');
         const bodyElement = document.body;
 
