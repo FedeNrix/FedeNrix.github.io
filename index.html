@@ -188,7 +188,7 @@
             100% { transform: scale(0.95); opacity: 0.8; }
         }
 
-        /* Panel en vivo con mezcla de acentos morado/lima */
+        /* Panel en vivo */
         .live-panel {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -246,7 +246,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* NUEVO CONTENEDOR DE REDES EXPANDIBLES */
+        /* Contenedor Maestro de Redes */
         .platforms-master-box {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -280,6 +280,7 @@
             gap: 1rem;
         }
 
+        /* Estilo actualizado para los íconos con SVG */
         .platform-icon {
             width: 40px;
             height: 40px;
@@ -287,17 +288,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: white;
             flex-shrink: 0;
+            padding: 8px;
         }
 
-        .yt { background-color: #ff0000; }
-        .twitch { background-color: #9146ff; }
-        .twitter { background-color: #1da1f2; }
-        .insta { background-color: #e1306c; }
-        .reddit { background-color: #ff4500; }
+        .platform-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        /* Colores de fondo de marca para los iconos */
+        .yt { background-color: #ff0000; color: white; }
+        .twitch { background-color: #9146ff; color: white; }
+        .twitter { background-color: #000000; color: white; border: 1px solid #333; } /* Estilo X moderno */
+        .insta { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
+        .reddit { background-color: #ff4500; color: white; }
 
         .platform-info h3 {
             font-size: 1rem;
@@ -315,7 +321,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* Contenido expandido dentro del panel */
         .platform-content {
             max-height: 0;
             overflow: hidden;
@@ -397,7 +402,6 @@
             border-top: 1px solid var(--border-color);
         }
     </style>
-    <!-- Importación opcional de tipografía gótica elegante de Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -425,14 +429,14 @@
             <p>Bienvenido al repositorio de mi vida y proyectos. Aquí centralizo todo el contenido que genero, mis directos, mis redes y el acceso directo a mis plataformas.</p>
         </section>
 
-        <!-- Panel en Vivo (Reloj, Fecha y Clima) -->
+        <!-- Panel en Vivo -->
         <div class="live-panel">
             <div class="live-date" id="fecha-actual">Cargando fecha...</div>
             <div class="live-clock" id="reloj-digital">00:00:00</div>
             <div class="live-weather" id="info-ubicacion-clima">📍 Detectando tu ubicación y clima local...</div>
         </div>
 
-        <!-- Canales de Contenido en Recuadro con Paneles Expandibles -->
+        <!-- Canales de Contenido con Iconos SVG Oficiales -->
         <section id="contenido">
             <h2>💻 Plataformas y Redes</h2>
             <div class="platforms-master-box">
@@ -441,7 +445,9 @@
                 <div class="platform-panel" onclick="togglePanel(this)">
                     <div class="platform-header">
                         <div class="platform-header-left">
-                            <div class="platform-icon yt">YT</div>
+                            <div class="platform-icon yt">
+                                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            </div>
                             <div class="platform-info">
                                 <h3>YouTube</h3>
                                 <p>Videos y contenido principal</p>
@@ -459,7 +465,9 @@
                 <div class="platform-panel" onclick="togglePanel(this)">
                     <div class="platform-header">
                         <div class="platform-header-left">
-                            <div class="platform-icon twitch">TW</div>
+                            <div class="platform-icon twitch">
+                                <svg viewBox="0 0 24 24"><path d="M11.64 5.93h1.66v5.81h-1.66M16.1 5.93h1.66v5.81H16.1M4.5 2.15L1.5 5.5v13.08h5.36V21h3.11l2.87-2.88h4.06l5.5-5.5V2.15H4.5zm16.13 10.42l-3.32 3.33h-4.3l-2.87 2.87v-2.87H6.38V3.82h14.25v8.75z"/></svg>
+                            </div>
                             <div class="platform-info">
                                 <h3>Twitch</h3>
                                 <p>Directos y streams en vivo</p>
@@ -477,7 +485,9 @@
                 <div class="platform-panel" onclick="togglePanel(this)">
                     <div class="platform-header">
                         <div class="platform-header-left">
-                            <div class="platform-icon twitter">𝕏</div>
+                            <div class="platform-icon twitter">
+                                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            </div>
                             <div class="platform-info">
                                 <h3>Twitter / X</h3>
                                 <p>Opiniones y avisos rápidos</p>
@@ -495,7 +505,9 @@
                 <div class="platform-panel" onclick="togglePanel(this)">
                     <div class="platform-header">
                         <div class="platform-header-left">
-                            <div class="platform-icon insta">IG</div>
+                            <div class="platform-icon insta">
+                                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </div>
                             <div class="platform-info">
                                 <h3>Instagram</h3>
                                 <p>Momentos y stories del día a día</p>
@@ -513,7 +525,9 @@
                 <div class="platform-panel" onclick="togglePanel(this)">
                     <div class="platform-header">
                         <div class="platform-header-left">
-                            <div class="platform-icon reddit">r/</div>
+                            <div class="platform-icon reddit">
+                                <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.579 0 1.05.47 1.05 1.05 0 .428-.256.795-.625.962-.128.537-.36 1.077-.678 1.603-1.042 1.722-3.13 2.85-5.493 2.923l.904 2.851 2.05-.483c.092-.472.497-.824.982-.824.552 0 1.002.449 1.002 1.002 0 .552-.45 1.002-1.002 1.002-.455 0-.842-.303-.96-.72l-2.222.523c-.22.052-.441-.082-.505-.302l-1.04-3.284c-2.316-.095-4.356-1.21-5.372-2.898-.328-.539-.569-1.092-.702-1.642-.358-.172-.604-.537-.604-.962 0-.58.471-1.05 1.05-1.05.352 0 .664.177.857.448.918-.619 2.103-1.005 3.39-1.066l1.243-3.84 3.35.79c.07-.312.348-.541.678-.541zm-9.356 3.69c-.664 0-1.203.539-1.203 1.203 0 .664.539 1.203 1.203 1.203.664 0 1.203-.539 1.203-1.203 0-.664-.539-1.203-1.203-1.203zm7.575 4.394c-.318.318-.318.834 0 1.152.318.318.834.318 1.152 0 .318-.318.318-.834 0-1.152-.318-.318-.834-.318-1.152 0zm-5.794-3.191c-.482 0-.875.393-.875.875 0 .482.393.875.875.875.482 0 .875-.393.875-.875 0-.482-.393-.875-.875-.875zm4.844-.001c-.482 0-.875.393-.875.875 0 .482.393.875.875.875.482 0 .875-.393.875-.875 0-.482-.393-.875-.875-.875z"/></svg>
+                            </div>
                             <div class="platform-info">
                                 <h3>Reddit</h3>
                                 <p>Comunidad y debates</p>
@@ -593,7 +607,7 @@
                             let estadoClima = "Despejado ☀️";
                             if (codigoWMO > 0 && codigoWMO < 4) estadoClima = "Parcialmente nublado ⛅";
                             if (codigoWMO >= 45 && codigoWMO <= 48) estadoClima = "Neblina 🌫️";
-                            if (codigoWMO >= 51 && codigoWMO <= 67) estadoClima.textContent = "Lluvia 🌧️"; // Ajustado texto limpio
+                            if (codigoWMO >= 51 && codigoWMO <= 67) estadoClima = "Lluvia 🌧️";
                             if (codigoWMO >= 71) estadoClima = "Nieve ❄️";
 
                             infoClimaElemento.innerHTML = `📍 Ubicación detectada &nbsp;|&nbsp; 🌡️ Temperatura: <b>${temp}°C</b> (${estadoClima})`;
@@ -611,15 +625,12 @@
             }
         }
 
-        // Inicializar funciones
         iniciarReloj();
         obtenerClimaYUbicacion();
 
         // 4. Lógica de Paneles Expandibles (Acordeón exclusivo)
         function togglePanel(panelSeleccionado) {
             const todosLosPaneles = document.querySelectorAll('.platform-panel');
-            
-            // Si el panel ya está activo, lo cerramos; si no, cerramos los demás y abrimos este
             const estaActivo = panelSeleccionado.classList.contains('active');
 
             todosLosPaneles.forEach(panel => {
