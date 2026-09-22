@@ -246,30 +246,38 @@
             letter-spacing: 0.5px;
         }
 
-        .platforms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-        }
-
-        .platform-card {
+        /* NUEVO CONTENEDOR DE REDES EXPANDIBLES */
+        .platforms-master-box {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 1.25rem;
-            text-decoration: none;
-            color: var(--text-color);
+            box-shadow: 0 4px 15px -2px rgba(145, 70, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .platform-panel {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .platform-header {
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .platform-header-left {
             display: flex;
             align-items: center;
             gap: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.2s ease;
-        }
-
-        .platform-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--hover-border);
-            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
         }
 
         .platform-icon {
@@ -299,6 +307,59 @@
         .platform-info p {
             font-size: 0.8rem;
             color: var(--text-muted);
+        }
+
+        .expand-icon {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        /* Contenido expandido dentro del panel */
+        .platform-content {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 1.25rem;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            border-top: 1px solid transparent;
+        }
+
+        .platform-panel.active {
+            border-color: var(--hover-border);
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.1);
+        }
+
+        .platform-panel.active .platform-content {
+            max-height: 150px;
+            padding: 1rem 1.25rem 1.25rem 1.25rem;
+            border-top-color: var(--border-color);
+        }
+
+        .platform-panel.active .expand-icon {
+            transform: rotate(180deg);
+            color: var(--accent-secondary);
+        }
+
+        .platform-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .platform-link-btn:hover {
+            border-color: var(--hover-border);
+            background-color: rgba(74, 222, 128, 0.05);
+            color: var(--accent-secondary);
         }
 
         .contact-box {
@@ -371,45 +432,101 @@
             <div class="live-weather" id="info-ubicacion-clima">📍 Detectando tu ubicación y clima local...</div>
         </div>
 
-        <!-- Canales de Contenido -->
+        <!-- Canales de Contenido en Recuadro con Paneles Expandibles -->
         <section id="contenido">
             <h2>💻 Plataformas y Redes</h2>
-            <div class="platforms-grid">
-                <a href="https://www.youtube.com/@fedenrix2007" target="_blank" class="platform-card">
-                    <div class="platform-icon yt">YT</div>
-                    <div class="platform-info">
-                        <h3>YouTube</h3>
-                        <p>Videos y contenido principal</p>
+            <div class="platforms-master-box">
+                
+                <!-- YouTube -->
+                <div class="platform-panel" onclick="togglePanel(this)">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-icon yt">YT</div>
+                            <div class="platform-info">
+                                <h3>YouTube</h3>
+                                <p>Videos y contenido principal</p>
+                            </div>
+                        </div>
+                        <div class="expand-icon">▼</div>
                     </div>
-                </a>
-                <a href="https://www.twitch.tv/fedenrix" target="_blank" class="platform-card">
-                    <div class="platform-icon twitch">TW</div>
-                    <div class="platform-info">
-                        <h3>Twitch</h3>
-                        <p>Directos y streams en vivo</p>
+                    <div class="platform-content">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Explora mis videos, tutoriales y vlogs más recientes publicados en el canal.</p>
+                        <a href="https://www.youtube.com/@fedenrix2007" target="_blank" class="platform-link-btn" onclick="event.stopPropagation()">Visitar Canal de YouTube ↗</a>
                     </div>
-                </a>
-                <a href="https://x.com/FedeNrix_" target="_blank" class="platform-card">
-                    <div class="platform-icon twitter">𝕏</div>
-                    <div class="platform-info">
-                        <h3>Twitter / X</h3>
-                        <p>Opiniones y avisos rápidos</p>
+                </div>
+
+                <!-- Twitch -->
+                <div class="platform-panel" onclick="togglePanel(this)">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-icon twitch">TW</div>
+                            <div class="platform-info">
+                                <h3>Twitch</h3>
+                                <p>Directos y streams en vivo</p>
+                            </div>
+                        </div>
+                        <div class="expand-icon">▼</div>
                     </div>
-                </a>
-                <a href="https://www.instagram.com/fedenrix_/" target="_blank" class="platform-card">
-                    <div class="platform-icon insta">IG</div>
-                    <div class="platform-info">
-                        <h3>Instagram</h3>
-                        <p>Momentos y stories del día a día</p>
+                    <div class="platform-content">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">¡Acompaña las transmisiones en directo, partidas y charlas con la comunidad!</p>
+                        <a href="https://www.twitch.tv/fedenrix" target="_blank" class="platform-link-btn" onclick="event.stopPropagation()">Visitar Canal de Twitch ↗</a>
                     </div>
-                </a>
-                <a href="https://www.reddit.com/user/FedeNrix/" target="_blank" class="platform-card">
-                    <div class="platform-icon reddit">r/</div>
-                    <div class="platform-info">
-                        <h3>Reddit</h3>
-                        <p>Comunidad y debates</p>
+                </div>
+
+                <!-- Twitter / X -->
+                <div class="platform-panel" onclick="togglePanel(this)">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-icon twitter">𝕏</div>
+                            <div class="platform-info">
+                                <h3>Twitter / X</h3>
+                                <p>Opiniones y avisos rápidos</p>
+                            </div>
+                        </div>
+                        <div class="expand-icon">▼</div>
                     </div>
-                </a>
+                    <div class="platform-content">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Entérate de los avisos de última hora, reflexiones y opiniones diarias.</p>
+                        <a href="https://x.com/FedeNrix_" target="_blank" class="platform-link-btn" onclick="event.stopPropagation()">Ver Perfil de X ↗</a>
+                    </div>
+                </div>
+
+                <!-- Instagram -->
+                <div class="platform-panel" onclick="togglePanel(this)">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-icon insta">IG</div>
+                            <div class="platform-info">
+                                <h3>Instagram</h3>
+                                <p>Momentos y stories del día a día</p>
+                            </div>
+                        </div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="platform-content">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Fotos exclusivas, historias del detrás de escena y momentos cotidianos.</p>
+                        <a href="https://www.instagram.com/fedenrix_/" target="_blank" class="platform-link-btn" onclick="event.stopPropagation()">Ver Instagram ↗</a>
+                    </div>
+                </div>
+
+                <!-- Reddit -->
+                <div class="platform-panel" onclick="togglePanel(this)">
+                    <div class="platform-header">
+                        <div class="platform-header-left">
+                            <div class="platform-icon reddit">r/</div>
+                            <div class="platform-info">
+                                <h3>Reddit</h3>
+                                <p>Comunidad y debates</p>
+                            </div>
+                        </div>
+                        <div class="expand-icon">▼</div>
+                    </div>
+                    <div class="platform-content">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Participa en los debates de la comunidad y hablemos de nuestros temas frikis favoritos.</p>
+                        <a href="https://www.reddit.com/user/FedeNrix/" target="_blank" class="platform-link-btn" onclick="event.stopPropagation()">Ver Perfil de Reddit ↗</a>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -476,7 +593,7 @@
                             let estadoClima = "Despejado ☀️";
                             if (codigoWMO > 0 && codigoWMO < 4) estadoClima = "Parcialmente nublado ⛅";
                             if (codigoWMO >= 45 && codigoWMO <= 48) estadoClima = "Neblina 🌫️";
-                            if (codigoWMO >= 51 && codigoWMO <= 67) estadoClima = "Lluvia 🌧️";
+                            if (codigoWMO >= 51 && codigoWMO <= 67) estadoClima.textContent = "Lluvia 🌧️"; // Ajustado texto limpio
                             if (codigoWMO >= 71) estadoClima = "Nieve ❄️";
 
                             infoClimaElemento.innerHTML = `📍 Ubicación detectada &nbsp;|&nbsp; 🌡️ Temperatura: <b>${temp}°C</b> (${estadoClima})`;
@@ -498,7 +615,23 @@
         iniciarReloj();
         obtenerClimaYUbicacion();
 
-        // 4. Copiar correo
+        // 4. Lógica de Paneles Expandibles (Acordeón exclusivo)
+        function togglePanel(panelSeleccionado) {
+            const todosLosPaneles = document.querySelectorAll('.platform-panel');
+            
+            // Si el panel ya está activo, lo cerramos; si no, cerramos los demás y abrimos este
+            const estaActivo = panelSeleccionado.classList.contains('active');
+
+            todosLosPaneles.forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            if (!estaActivo) {
+                panelSeleccionado.classList.add('active');
+            }
+        }
+
+        // 5. Copiar correo
         function copiarCorreo() {
             const correo = "fedejuareztachini2007@gmail.com";
             navigator.clipboard.writeText(correo).then(() => {
@@ -510,7 +643,7 @@
             });
         }
 
-        // 5. Modo Claro / Oscuro con memoria local
+        // 6. Modo Claro / Oscuro con memoria local
         const themeToggleBtn = document.getElementById('themeToggle');
         const bodyElement = document.body;
 
