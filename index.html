@@ -246,6 +246,80 @@
             letter-spacing: 0.5px;
         }
 
+        /* Estilos de la Bóveda Secreta */
+        .vault-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px -2px rgba(145, 70, 255, 0.15);
+            margin-bottom: 3rem;
+        }
+
+        .vault-instruction {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .dials-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dial-box {
+            background: var(--bg-color);
+            border: 2px solid var(--accent-primary);
+            border-radius: 10px;
+            padding: 1rem 0.5rem;
+            width: 70px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 0 10px rgba(145, 70, 255, 0.3);
+            transition: transform 0.1s, border-color 0.2s, background-color 0.2s;
+        }
+
+        .dial-box:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-secondary);
+        }
+
+        .dial-box.stopped {
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+        }
+
+        .dial-number {
+            font-size: 2.4rem;
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--accent-secondary);
+            display: block;
+        }
+
+        .dial-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .vault-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .vault-status-message {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            min-height: 24px;
+        }
+
         /* Contenedor Maestro de Redes */
         .platforms-master-box {
             background-color: var(--card-bg);
@@ -280,7 +354,6 @@
             gap: 1rem;
         }
 
-        /* Estilo actualizado para los íconos con SVG */
         .platform-icon {
             width: 40px;
             height: 40px;
@@ -298,10 +371,9 @@
             fill: currentColor;
         }
 
-        /* Colores de fondo de marca para los iconos */
         .yt { background-color: #ff0000; color: white; }
         .twitch { background-color: #9146ff; color: white; }
-        .twitter { background-color: #000000; color: white; border: 1px solid #333; } /* Estilo X moderno */
+        .twitter { background-color: #000000; color: white; border: 1px solid #333; }
         .insta { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
         .reddit { background-color: #ff4500; color: white; }
 
@@ -411,6 +483,7 @@
             <a href="#" class="logo">El Sótano <span>del Frikismo</span></a>
             <div class="nav-right">
                 <ul class="nav-links">
+                    <li><a href="#boveda-secreta">Bóveda</a></li>
                     <li><a href="#contenido">Contenido</a></li>
                     <li><a href="#contacto">Contacto</a></li>
                 </ul>
@@ -435,6 +508,40 @@
             <div class="live-clock" id="reloj-digital">00:00:00</div>
             <div class="live-weather" id="info-ubicacion-clima">📍 Detectando tu ubicación y clima local...</div>
         </div>
+
+        <!-- Bóveda Secreta con Ruleta Infinita -->
+        <section id="boveda-secreta">
+            <h2>🔒 Bóveda del Sótano</h2>
+            <div class="vault-container">
+                <p class="vault-instruction">¡Las ruletas giran sin parar! Haz <b>clic sobre cada número</b> para detenerlo y descifra la combinación secreta.</p>
+                
+                <div class="dials-wrapper">
+                    <div class="dial-box" id="box-0" onclick="toggleDial(0)">
+                        <span class="dial-number" id="dial-0">0</span>
+                        <span class="dial-label">Dígito 1</span>
+                    </div>
+                    <div class="dial-box" id="box-1" onclick="toggleDial(1)">
+                        <span class="dial-number" id="dial-1">0</span>
+                        <span class="dial-label">Dígito 2</span>
+                    </div>
+                    <div class="dial-box" id="box-2" onclick="toggleDial(2)">
+                        <span class="dial-number" id="dial-2">0</span>
+                        <span class="dial-label">Dígito 3</span>
+                    </div>
+                    <div class="dial-box" id="box-3" onclick="toggleDial(3)">
+                        <span class="dial-number" id="dial-3">0</span>
+                        <span class="dial-label">Dígito 4</span>
+                    </div>
+                </div>
+
+                <div class="vault-controls">
+                    <button class="copy-btn" onclick="verificarCombinacion()">🔓 Probar Combinación</button>
+                    <button class="copy-btn" style="border-color: var(--accent-primary); color: var(--accent-primary);" onclick="reiniciarGiro()">🌀 Volver a girar</button>
+                </div>
+
+                <div id="vault-status" class="vault-status-message"></div>
+            </div>
+        </section>
 
         <!-- Canales de Contenido con Iconos SVG Oficiales -->
         <section id="contenido">
@@ -561,10 +668,81 @@
 
     <!-- Lógica de JavaScript -->
     <script>
-        // 1. Saludo automático con "Buenos Días", "Buenas Tardes", "Buenas Noches"
+        // --- LÓGICA DE LA BÓVEDA SECRETA ---
+        const CODIGO_SECRETO = "1337"; // 👈 Cambia aquí tu código de 4 dígitos
+        const URL_DESTINO = "https://tu-otra-pagina.com"; // 👈 URL a redirigir al desbloquear
+
+        let dialValues = [0, 0, 0, 0];
+        let isSpinning = [true, true, true, true];
+        let spinIntervals = [];
+
+        function iniciarGirosAutomaticos() {
+            for (let i = 0; i < 4; i++) {
+                if (isSpinning[i]) {
+                    spinIntervals[i] = setInterval(() => {
+                        dialValues[i] = (dialValues[i] + 1) % 10;
+                        document.getElementById(`dial-${i}`).textContent = dialValues[i];
+                    }, 70 + i * 35);
+                }
+            }
+        }
+
+        function toggleDial(index) {
+            if (isSpinning[index]) {
+                clearInterval(spinIntervals[index]);
+                isSpinning[index] = false;
+                document.getElementById(`box-${index}`).classList.add('stopped');
+            } else {
+                isSpinning[index] = true;
+                document.getElementById(`box-${index}`).classList.remove('stopped');
+                spinIntervals[index] = setInterval(() => {
+                    dialValues[index] = (dialValues[index] + 1) % 10;
+                    document.getElementById(`dial-${index}`).textContent = dialValues[index];
+                }, 70 + index * 35);
+            }
+        }
+
+        function reiniciarGiro() {
+            for (let i = 0; i < 4; i++) {
+                if (!isSpinning[i]) {
+                    isSpinning[i] = true;
+                    document.getElementById(`box-${i}`).classList.remove('stopped');
+                }
+                clearInterval(spinIntervals[i]);
+            }
+            document.getElementById('vault-status').textContent = "";
+            iniciarGirosAutomaticos();
+        }
+
+        function verificarCombinacion() {
+            const aunGira = isSpinning.some(val => val === true);
+            if (aunGira) {
+                document.getElementById('vault-status').textContent = "⚠️ ¡Detén todas las ruletas haciendo clic en ellas antes de probar!";
+                document.getElementById('vault-status').style.color = "#ff4500";
+                return;
+            }
+
+            const intento = dialValues.join('');
+            const statusText = document.getElementById('vault-status');
+
+            if (intento === CODIGO_SECRETO) {
+                statusText.textContent = "🔓 ¡ACCESO CONCEDIDO! Redirigiendo a la zona secreta...";
+                statusText.style.color = "#4ade80";
+
+                setTimeout(() => {
+                    window.location.href = URL_DESTINO;
+                }, 1500);
+            } else {
+                statusText.textContent = `❌ Combinación incorrecta (${intento}). ¡Inténtalo de nuevo!`;
+                statusText.style.color = "#ff4500";
+            }
+        }
+
+        iniciarGirosAutomaticos();
+
+        // 1. Saludo automático
         const badgeText = document.getElementById('saludo-dinamico');
         const hora = new Date().getHours();
-        
         if (hora >= 6 && hora < 12) {
             badgeText.textContent = "¡Buenos Días! ☀️";
         } else if (hora >= 12 && hora < 20) {
@@ -573,43 +751,37 @@
             badgeText.textContent = "¡Buenas Noches! 🌙";
         }
 
-        // 2. Reloj en tiempo real y fecha actual
+        // 2. Reloj en tiempo real y fecha
         function iniciarReloj() {
             const relojElemento = document.getElementById('reloj-digital');
             const fechaElemento = document.getElementById('fecha-actual');
-            
             setInterval(() => {
                 const ahora = new Date();
                 relojElemento.textContent = ahora.toLocaleTimeString();
-                
                 const opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 fechaElemento.textContent = ahora.toLocaleDateString('es-ES', opcionesFecha);
             }, 1000);
         }
+        iniciarReloj();
 
-        // 3. Geolocalización y Clima local (Open-Meteo)
+        // 3. Geolocalización y Clima
         async function obtenerClimaYUbicacion() {
             const infoClimaElemento = document.getElementById('info-ubicacion-clima');
-
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(async (position) => {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
-
                     try {
                         const respuestaClima = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
                         const datosClima = await respuestaClima.json();
-                        
                         if (datosClima && datosClima.current_weather) {
                             const temp = datosClima.current_weather.temperature;
                             const codigoWMO = datosClima.current_weather.weathercode;
-                            
                             let estadoClima = "Despejado ☀️";
                             if (codigoWMO > 0 && codigoWMO < 4) estadoClima = "Parcialmente nublado ⛅";
                             if (codigoWMO >= 45 && codigoWMO <= 48) estadoClima = "Neblina 🌫️";
                             if (codigoWMO >= 51 && codigoWMO <= 67) estadoClima = "Lluvia 🌧️";
                             if (codigoWMO >= 71) estadoClima = "Nieve ❄️";
-
                             infoClimaElemento.innerHTML = `📍 Ubicación detectada &nbsp;|&nbsp; 🌡️ Temperatura: <b>${temp}°C</b> (${estadoClima})`;
                         } else {
                             infoClimaElemento.textContent = "📍 Ubicación detectada (Clima no disponible)";
@@ -624,22 +796,14 @@
                 infoClimaElemento.textContent = "🌍 Tu navegador no soporta geolocalización";
             }
         }
-
-        iniciarReloj();
         obtenerClimaYUbicacion();
 
-        // 4. Lógica de Paneles Expandibles (Acordeón exclusivo)
+        // 4. Lógica de Paneles Expandibles
         function togglePanel(panelSeleccionado) {
             const todosLosPaneles = document.querySelectorAll('.platform-panel');
             const estaActivo = panelSeleccionado.classList.contains('active');
-
-            todosLosPaneles.forEach(panel => {
-                panel.classList.remove('active');
-            });
-
-            if (!estaActivo) {
-                panelSeleccionado.classList.add('active');
-            }
+            todosLosPaneles.forEach(panel => panel.classList.remove('active'));
+            if (!estaActivo) panelSeleccionado.classList.add('active');
         }
 
         // 5. Copiar correo
@@ -654,19 +818,16 @@
             });
         }
 
-        // 6. Modo Claro / Oscuro con memoria local
+        // 6. Modo Claro / Oscuro
         const themeToggleBtn = document.getElementById('themeToggle');
         const bodyElement = document.body;
-
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {
             bodyElement.classList.add('light-mode');
             themeToggleBtn.textContent = '☀️';
         }
-
         themeToggleBtn.addEventListener('click', () => {
             bodyElement.classList.toggle('light-mode');
-            
             if (bodyElement.classList.contains('light-mode')) {
                 themeToggleBtn.textContent = '☀️';
                 localStorage.setItem('theme', 'light');
